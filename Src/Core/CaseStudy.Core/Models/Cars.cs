@@ -23,24 +23,24 @@ namespace CaseStudy.Core.Models
 
         [Required]
         [StringLength(255)]
-        public string Make { get; set; }
+        public string? Make { get; set; }
 
         [Required]
         [StringLength(255)]
-        public string Model { get; set; }
+        public string? Model { get; set; }
 
         [Required]
         [StringLength(255)]
-        public string Body { get; set; }
+        public string? Body { get; set; }
 
         [StringLength(255)]
-        public string Trim { get; set; }
+        public string? Trim { get; set; }
 
         [StringLength(255)]
-        public string Transmission { get; set; }
+        public string? Transmission { get; set; }
 
         [StringLength(255)]
-        public string InteriorColor { get; set; }
+        public string? InteriorColor { get; set; }
 
         [Required]
         [DataType(DataType.Currency)]
