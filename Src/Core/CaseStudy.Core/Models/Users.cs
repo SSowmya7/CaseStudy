@@ -24,7 +24,10 @@ namespace CaseStudy.Core.Models
         [Phone]
         [StringLength(15)]
         public string? PhoneNumber { get; set; }
+        [Required]
+        [StringLength(8)]
+        public string Password { get; set; }
 
-        
+
     }
 }
