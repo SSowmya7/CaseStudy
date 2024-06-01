@@ -25,7 +25,6 @@ namespace CaseStudy.Application.DTOS
         [StringLength(15)]
         public string PhoneNumber { get; set; }
 
-        [Required]
-        public bool IsLoggedIn { get; set; }
+       
     }
 }

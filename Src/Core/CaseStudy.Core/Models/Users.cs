@@ -27,6 +27,8 @@ namespace CaseStudy.Core.Models
         [Required]
         [StringLength(8)]
         public string? Password { get; set; }
+        [Required]
+        public bool IsLoggedIn { get; set; }
 
 
     }
