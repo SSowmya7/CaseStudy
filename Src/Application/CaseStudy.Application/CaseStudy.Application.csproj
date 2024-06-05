@@ -11,8 +11,4 @@
     <ProjectReference Include="..\..\Infrastructure\CaseStudy.Infrastructure\CaseStudy.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTOS\" />
-  </ItemGroup>
-
 </Project>

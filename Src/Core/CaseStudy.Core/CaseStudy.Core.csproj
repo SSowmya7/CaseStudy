@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Contracts\IReposritories\" />
     <Folder Include="Contracts\IUnitOfWork\" />
-    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>
