@@ -1,4 +1,7 @@
 
+using CaseStudy.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace CaseStudy.API
 {
     public class Program
@@ -13,7 +16,8 @@ namespace CaseStudy.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+            builder.Services.AddDbContext<PrjContext>(opt => opt.UseSqlServer(
+              builder.Configuration.GetConnectionString("dbcn")));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
