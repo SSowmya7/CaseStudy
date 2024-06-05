@@ -11,18 +11,18 @@ namespace CaseStudy.Core.Models
         public int DealerId { get; set; }
 
         [Required]
-        [StringLength(255)]
+        [StringLength(20)]
         public string Type { get; set; }
 
         [Required]
-        [StringLength(255)]
+        [StringLength(20)]
         public string VIN { get; set; }
 
         [Required]
         public int Year { get; set; }
 
         [Required]
-        [StringLength(255)]
+        [StringLength(20)]
         public string? Make { get; set; }
 
         [Required]
@@ -43,6 +43,8 @@ namespace CaseStudy.Core.Models
         public string? InteriorColor { get; set; }
 
         [Required]
+
+
         [DataType(DataType.Currency)]
         public decimal SellingPrice { get; set; }
     }
