@@ -1,9 +1,14 @@
-﻿namespace CaseStudy.Core.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CaseStudy.Core.Models
 {
     public class UserFavourites
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public int VehicleVin {  get; set; }
+        [Required]
+        [StringLength(20)]
+        public string VIN { get; set; }
+
     }
 }
