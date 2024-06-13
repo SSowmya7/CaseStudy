@@ -9,6 +9,7 @@ namespace CaseStudy.Core.Contracts.IReposritories
 {
     public  interface ILandingPageRepo
     {
-        public IEnumerable<DealerPages> GetPageSettings(string PageName);
+        //public IEnumerable<DealerPages> GetPageSettings(string PageName);
+        public  Task<IEnumerable<Cars>> Get10RandomCars();
     }
 }

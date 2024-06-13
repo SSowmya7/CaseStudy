@@ -1,6 +1,7 @@
 ﻿using CaseStudy.Core.Contracts.IReposritories;
 using CaseStudy.Core.Contracts.IUnitOfWork;
 using CaseStudy.Core.Models;
+using Microsoft.Data.SqlClient;
 
 namespace CaseStudy.Infrastructure.UnitOfWork
 {
@@ -11,10 +12,17 @@ namespace CaseStudy.Infrastructure.UnitOfWork
 
             _landingPageRepo = landingPageRepo;        
         }
-        public IEnumerable<DealerPages> GetPageSettings(string landing)
+        //public IEnumerable<DealerPages> GetPageSettings(string landing)
+        //{
+        //    var PageSettings = _landingPageRepo.GetPageSettings(landing);
+        //    return PageSettings;
+        //}
+        public async Task<IEnumerable<Cars>> Get10RandomCars()
         {
-            var PageSettings = _landingPageRepo.GetPageSettings(landing);
-            return PageSettings;
+            var cars = await _landingPageRepo.Get10RandomCars();
+            return cars;
+
+
         }
     }
 }
