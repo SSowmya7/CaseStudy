@@ -20,24 +20,36 @@ namespace CaseStudy.Infrastructure.UnitOfWork
         }
         public async Task<IEnumerable<Cars>> Get10RandomCars()
         {
-            using (var connection = new SqlConnection(_connectionString))
+            try
             {
-                var sql = "SELECT TOP 10 * FROM Cars ";
-                var cars = await connection.QueryAsync<Cars>(sql);
-                return cars;
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    var sql = "SELECT TOP 10 * FROM Cars ";
+                    var cars = await connection.QueryAsync<Cars>(sql);
+                    return cars;
+                }
             }
-
+            catch
+            {
+                throw new Exception();
+            }
 
         }
         public async Task<IEnumerable<Cars>> GetAllCars()
         {
-            using (var connection = new SqlConnection(_connectionString))
+            try
             {
+                using (var connection = new SqlConnection(_connectionString))
+                {
 
-                var cars = await connection.QueryAsync<Cars>("GetAllCars", commandType: System.Data.CommandType.StoredProcedure);
-                return cars;
+                    var cars = await connection.QueryAsync<Cars>("GetAllCars", commandType: System.Data.CommandType.StoredProcedure);
+                    return cars;
+                }
             }
-
+            catch
+            {
+                throw new Exception();
+            }
 
         }
         public async Task<Cars> GetCarByVin(string vin)
@@ -47,29 +59,38 @@ namespace CaseStudy.Infrastructure.UnitOfWork
 
         public async Task<IEnumerable<Cars>> GetSimilarCarsAsync(string vin)
         {
-            // Find the car by VIN
-            var car = await GetCarByVin(vin);
-            if (car == null)
+            try
             {
-                return Enumerable.Empty<Cars>();
+                // Find the car by VIN
+                var car = await GetCarByVin(vin);
+                if (car == null)
+                {
+                    return Enumerable.Empty<Cars>();
+                }
+
+
+                var cars = await context.cars
+                    .Where(c => c.Make == car.Make
+                    //  && c.Model == car.Model 
+                    && c.HomeNetVehicleId != car.HomeNetVehicleId)
+                    .ToListAsync();
+
+                return cars;
             }
-
-
-            var cars = await context.cars
-                .Where(c => c.Make == car.Make
-                //  && c.Model == car.Model 
-                && c.HomeNetVehicleId != car.HomeNetVehicleId)
-                .ToListAsync();
-
-            return cars;
+            catch
+            {
+                throw new Exception();
+            }
         }
 
         public async Task<IEnumerable<Cars>> GetFavouriteCarsByUserIdAsync(int userId)
         {
-
-            using (var connection = new SqlConnection(_connectionString))
+            try
             {
-                string sql = @$"
+
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    string sql = @$"
                 SELECT c.*
                 FROM UserFavourites uf
                 JOIN Cars c ON uf.VIN = c.VIN
@@ -78,35 +99,47 @@ namespace CaseStudy.Infrastructure.UnitOfWork
 
 
 
-                return await connection.QueryAsync<Cars>(sql);
+                    return await connection.QueryAsync<Cars>(sql);
+                }
+            }
+            catch
+            {
+                throw new Exception();
             }
         }
 
         public async Task<IEnumerable<Cars>> GetCarsByFiltersAsync(string make = null, string model = null, int? year = null, string color = null)
         {
-            IQueryable<Cars> query = context.cars;
-
-            if (!string.IsNullOrEmpty(make))
+            try
             {
-                query = query.Where(c => c.Make == make);
-            }
+                IQueryable<Cars> query = context.cars;
 
-            if (!string.IsNullOrEmpty(model))
+                if (!string.IsNullOrEmpty(make))
+                {
+                    query = query.Where(c => c.Make == make);
+                }
+
+                if (!string.IsNullOrEmpty(model))
+                {
+                    query = query.Where(c => c.Model == model);
+                }
+
+                if (year.HasValue)
+                {
+                    query = query.Where(c => c.Year == year.Value);
+                }
+
+                if (!string.IsNullOrEmpty(color))
+                {
+                    query = query.Where(c => c.InteriorColor == color);
+                }
+
+                return await query.ToListAsync();
+            }
+            catch
             {
-                query = query.Where(c => c.Model == model);
+                throw new Exception();
             }
-
-            if (year.HasValue)
-            {
-                query = query.Where(c => c.Year == year.Value);
-            }
-
-            if (!string.IsNullOrEmpty(color))
-            {
-                query = query.Where(c => c.InteriorColor == color);
-            }
-
-            return await query.ToListAsync();
         }
 
 

@@ -26,8 +26,14 @@ namespace CaseStudy.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetRandom10Cars()
         {
-            var cars = await services.Get10RandomCars();
-            return Ok(cars);
+            try
+            {
+                var cars = await services.Get10RandomCars();
+                return Ok(cars);
+            }
+            catch{
+                throw new Exception();
+            }
         }
 
 

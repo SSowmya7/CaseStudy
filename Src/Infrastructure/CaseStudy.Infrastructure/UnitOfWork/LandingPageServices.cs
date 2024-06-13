@@ -19,8 +19,15 @@ namespace CaseStudy.Infrastructure.UnitOfWork
         //}
         public async Task<IEnumerable<Cars>> Get10RandomCars()
         {
-            var cars = await _landingPageRepo.Get10RandomCars();
-            return cars;
+            try
+            {
+                var cars = await _landingPageRepo.Get10RandomCars();
+                return cars;
+            }
+            catch
+            {
+                throw new Exception();
+            }
 
 
         }

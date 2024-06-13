@@ -25,11 +25,16 @@ namespace CaseStudy.Infrastructure.Repositories
 
         public async Task<IEnumerable<Cars>> Get10RandomCars()
         {
-          
+            try
+            {
                 var cars = await _carServices.Get10RandomCars();
                 return cars;
-            
 
+            }
+            catch
+            {
+                throw new Exception();
+            }
 
         }
     }
