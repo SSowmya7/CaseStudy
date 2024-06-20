@@ -13,7 +13,7 @@ namespace CaseStudy.Infrastructure.Data
         public DbSet<Components> components { get; set; }
         public DbSet<DealerPages> dealerPages { get; set; }
         public DbSet<Dealers> dealers { get; set; }
-        public DbSet<HeaderAndFooterSettings> headerAndFooterSettings { get; set; }
+        public DbSet<HeaderAndFooterSettings> HeaderAndFooterSettings { get; set; }
         public DbSet<MenuSettings> menuSettings { get; set; }
         public DbSet<Pages> pages { get; set; }
         public DbSet<UserFavourites> userFavourites { get; set; }
