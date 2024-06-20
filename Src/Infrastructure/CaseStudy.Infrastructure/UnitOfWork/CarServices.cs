@@ -4,6 +4,7 @@ using CaseStudy.Infrastructure.Data;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 
@@ -16,7 +17,7 @@ namespace CaseStudy.Infrastructure.UnitOfWork
         public CarServices(PrjContext Context, IConfiguration configuration)
         {
             context = Context;
-            _connectionString = configuration.GetConnectionString("dbcn");
+            _connectionString = configuration.GetConnectionString("dbcn") ??"NoConnections";
         }
         public async Task<IEnumerable<Cars>> Get10RandomCars()
         {
@@ -29,10 +30,11 @@ namespace CaseStudy.Infrastructure.UnitOfWork
                     return cars;
                 }
             }
-            catch
-            {
-                throw new Exception();
+            catch(Exception ex) { 
+            
+                throw new Exception(ex.ToString());
             }
+            
 
         }
         public async Task<IEnumerable<Cars>> GetAllCars()
@@ -54,7 +56,7 @@ namespace CaseStudy.Infrastructure.UnitOfWork
         }
         public async Task<Cars> GetCarByVin(string vin)
         {
-            return await context.cars.FirstOrDefaultAsync(c => c.VIN == vin);
+            return await context.Cars.FirstOrDefaultAsync(c => c.VIN == vin);
         }
 
         public async Task<IEnumerable<Cars>> GetSimilarCarsAsync(string vin)
@@ -69,7 +71,7 @@ namespace CaseStudy.Infrastructure.UnitOfWork
                 }
 
 
-                var cars = await context.cars
+                var cars = await context.Cars
                     .Where(c => c.Make == car.Make
                     //  && c.Model == car.Model 
                     && c.HomeNetVehicleId != car.HomeNetVehicleId)
@@ -107,12 +109,12 @@ namespace CaseStudy.Infrastructure.UnitOfWork
                 throw new Exception();
             }
         }
-
+        
         public async Task<IEnumerable<Cars>> GetCarsByFiltersAsync(string make = null, string model = null, int? year = null, string color = null)
         {
             try
             {
-                IQueryable<Cars> query = context.cars;
+                IQueryable<Cars> query = context.Cars;
 
                 if (!string.IsNullOrEmpty(make))
                 {
