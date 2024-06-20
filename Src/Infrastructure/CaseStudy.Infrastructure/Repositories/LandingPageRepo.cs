@@ -1,7 +1,6 @@
 ﻿using CaseStudy.Core.Contracts.IReposritories;
 using CaseStudy.Core.Contracts.IUnitOfWork;
 using CaseStudy.Core.Models;
-using CaseStudy.Infrastructure.UnitOfWork;
 
 namespace CaseStudy.Infrastructure.Repositories
 {
@@ -31,7 +30,7 @@ namespace CaseStudy.Infrastructure.Repositories
                 return cars;
 
             }
-            catch
+            catch 
             {
                 throw new Exception();
             }

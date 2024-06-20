@@ -3,8 +3,8 @@
     public static class Constants
     {
         public const string Landing = "LandingPage";
-        public const string srp = "SrpPage";
-        public const string vdp = "VdpPage";
-        public const string login = "LoginPage";
+        public const string Srp = "SrpPage";
+        public const string Vdp = "VdpPage";
+        public const string Login = "LoginPage";
     }
 }

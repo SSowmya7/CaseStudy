@@ -1,12 +1,5 @@
-﻿using CaseStudy.Infrastructure.Data;
-using Microsoft.AspNetCore.Http;
+﻿using CaseStudy.Core.Contracts.IUnitOfWork;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata;
-using CaseStudy.Infrastructure;
-using CaseStudy.Infrastructure.UnitOfWork;
-using CaseStudy.Core.Contracts.IUnitOfWork;
-using CaseStudy.Core.Models;
-using Microsoft.Data.SqlClient;
 namespace CaseStudy.API.Controllers
 {
     [Route("api/[controller]")]
@@ -14,12 +7,12 @@ namespace CaseStudy.API.Controllers
     public class LandingPageController : ControllerBase
     {
 
-        ILandingPageServices services;
-       // ICarServices carServices;
+       private readonly ILandingPageServices _services;
+       
         public LandingPageController(ILandingPageServices landingPageServices)
         {
-           // carServices = Carservices;
-            services = landingPageServices;
+          
+            _services = landingPageServices;
 
         }
 
@@ -28,46 +21,17 @@ namespace CaseStudy.API.Controllers
         {
             try
             {
-                var cars = await services.Get10RandomCars();
+                var cars = await _services.Get10RandomCars();
+                
                 return Ok(cars);
             }
-            catch{
-                throw new Exception();
+            catch (Exception ex){
+               return BadRequest(ex);
             }
         }
 
 
-        //------------WROTE TO CHECK CARSERVICES ENDPOINTS---------
-        //[HttpGet("/allCars")]
-        //public async Task<IEnumerable<Cars>> GetAllCars()
-        //{
-        //    return await carServices.GetAllCars();
-
-
-
-        //}
-        //[HttpGet("/{vin}")]
-        //public async Task<Cars> GetCarByVin(string vin)
-        //{
-        //    return await carServices.GetCarByVin(vin);
-        //}
-
-
-        //[HttpGet("/similarCars{vin}")]
-        //public async Task<IEnumerable<Cars>> GetSimilarCars(string vin)
-        //{
-        //    return await carServices.GetSimilarCarsAsync(vin);
-        //}
-        //[HttpGet("/favCars{userId}")]
-        //public async Task<IEnumerable<Cars>> GetfavouriteCars(int userId)
-        //{
-        //    return await carServices.GetFavouriteCarsByUserIdAsync(userId);
-        //}
-        //[HttpGet("/filterCars")]
-        //public async Task<IEnumerable<Cars>> GetfilteredCars(string make = null, string model = null, int? year = null, string color = null)
-        //{
-        //    return await carServices.GetCarsByFiltersAsync(make,model,year,color);
-        //}
+       
 
 
     }
