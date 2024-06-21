@@ -1,32 +1,26 @@
 ﻿using CaseStudy.Core.Contracts.IUnitOfWork;
 using CaseStudy.Core.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using Serilog;
 
 namespace CaseStudy.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserFavController : ControllerBase
+    public class UserFavController(IUserFavServices _favServices) : ControllerBase
     {
-        private IUserFavServices userFavServices;
-        public UserFavController(IUserFavServices favServices)
-        {
-            userFavServices = favServices;
-        }
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cars>>> GetFavCars(int userId)
         {
             try
             {
-              IEnumerable<Cars> cars =  await userFavServices.GetFavCars(userId);
+                IEnumerable<Cars> cars = await _favServices.GetFavCars(userId);
                 return Ok(cars);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                Log.Error(ex, "An error while retriveing cars at controller level");
+                return Content(ex.ToString());
             }
         }
 
@@ -38,26 +32,28 @@ namespace CaseStudy.API.Controllers
         {
             try
             {
-                await userFavServices.AddFavCar(favourite);
+                await _favServices.AddFavCar(favourite);
                 return Ok(favourite);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                Log.Error(ex, "An error while adding cars at controller level");
+                return Content(ex.ToString());
             }
         }
 
-        [HttpDelete("/{vin}")]
+        [HttpDelete("/{userId}/{vin}")]
         public async Task<IActionResult> DeleteFavCar(int userId, string vin)
         {
             try
             {
-                await userFavServices.DeleteFavCar(userId, vin);
-                return NoContent();
+                await _favServices.DeleteFavCar(userId, vin);
+                return Content("Deleted Successfully");
             }
-            catch { }
+            catch (Exception ex)
             {
-                throw new Exception();
+                Log.Error(ex, "An error while deleting cars at controller level");
+                return Content(ex.ToString());
             }
         }
     }

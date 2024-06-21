@@ -1,59 +1,50 @@
 ﻿using CaseStudy.Core.Contracts.IReposritories;
 using CaseStudy.Core.Contracts.IUnitOfWork;
 using CaseStudy.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Serilog;
 
 namespace CaseStudy.Infrastructure.UnitOfWork
 {
-    public class UserFavServices : IUserFavServices
+    public class UserFavServices(IUserFavRepo _userFavRepo) : IUserFavServices
     {
-        IUserFavRepo userFavRepo;
-        public UserFavServices(IUserFavRepo _userFavRepo)
-        {
-            userFavRepo = _userFavRepo;
-
-        }
-
-
         public async Task<IEnumerable<Cars>> GetFavCars(int userId)
         {
             try
             {
-                IEnumerable<Cars> cars = await userFavRepo.GetFavCars(userId);
+                IEnumerable<Cars> cars = await _userFavRepo.GetFavCars(userId);
                 return cars;
             }
             catch (Exception ex)
             {
-                throw new Exception();
+                Log.Error(ex, "An error while retriveing favourite cars at controller level");
+                return [];
             }
         }
         public async Task<bool> AddFavCar(UserFavourites favourite)
         {
             try
             {
-                await userFavRepo.AddFavCar(favourite);
+                await _userFavRepo.AddFavCar(favourite);
                 return true;
 
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception();
+                Log.Error(ex, "An error while adding favourite cars at controller level");
+                return false;
             }
         }
         public async Task<bool> DeleteFavCar(int userId, string vin)
         {
             try
             {
-                 await userFavRepo.DeleteFavCar(userId,vin);
+                await _userFavRepo.DeleteFavCar(userId, vin);
                 return true;
             }
-            catch { }
+            catch (Exception ex)
             {
-                throw new Exception();
+                Log.Error(ex, "An error while deleting favourite cars at controller level");
+                return false;
             }
         }
     }

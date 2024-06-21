@@ -1,67 +1,62 @@
 ﻿using CaseStudy.Core.Contracts.IReposritories;
 using CaseStudy.Core.Models;
 using CaseStudy.Infrastructure.Data;
-using CaseStudy.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Serilog;
 
 namespace CaseStudy.Infrastructure.Repositories
 {
-    public class UserFavRepo : IUserFavRepo
+    public class UserFavRepo(PrjContext prjContext) : IUserFavRepo
     {
-        PrjContext context;
-        public UserFavRepo(PrjContext prjContext)
-        {
-            context = prjContext;
-        }
-
-
-
         public async Task<IEnumerable<Cars>> GetFavCars(int userId)
         {
             try
             {
-               // IEnumerable<Cars> cars = await userFavServices.GetFavCars(userId);
+                // IEnumerable<Cars> cars = await userFavServices.GetFavCars(userId);
                 //return cars;
                 throw new NotImplementedException();//this method already exists in carservices
             }
             catch (Exception ex)
             {
-                throw new Exception();
+                Log.Error(ex, "An error while retriveing cars at repo level");
+                return [];
             }
         }
         public async Task<bool> AddFavCar(UserFavourites favourite)
         {
             try
             {
-                await context.userFavourites.AddAsync(favourite);
-                context.SaveChanges();
+                await prjContext.UserFavourites.AddAsync(favourite);
+                await prjContext.SaveChangesAsync();
                 return true;
             }
-            catch {
-                throw new Exception();
-                
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error while adding user favourite car at repo level");
+                return false;
             }
         }
 
-        public async Task<bool> DeleteFavCar(int userId,string vin)
+        public async Task<bool> DeleteFavCar(int userId, string vin)
         {
             try
             {
-                UserFavourites userfav = await context.userFavourites
-            .Where(uf => uf.UserId == userId && uf.VIN == vin)
-            .FirstOrDefaultAsync();
-                context.userFavourites.Remove(userfav);
-                context.SaveChanges();
+                var userFav = await prjContext.UserFavourites
+                    .FirstOrDefaultAsync(uf => uf.UserId == userId && uf.VIN == vin);
+
+                if (userFav == null)
+                {
+                    return false;
+                }
+
+                prjContext.UserFavourites.Remove(userFav);
+                await prjContext.SaveChangesAsync();
                 return true;
             }
-            catch { }
+            catch (Exception ex)
             {
-                throw new Exception();
+                Log.Error(ex, "An error while deleting user favourite car at repo level");
+                return false;
             }
         }
 
