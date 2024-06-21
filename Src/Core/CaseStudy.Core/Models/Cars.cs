@@ -47,5 +47,6 @@ namespace CaseStudy.Core.Models
 
         [DataType(DataType.Currency)]
         public decimal SellingPrice { get; set; }
+        
     }
 }

@@ -1,5 +1,9 @@
 
+using CaseStudy.Core.Contracts.IReposritories;
+using CaseStudy.Core.Contracts.IUnitOfWork;
 using CaseStudy.Infrastructure.Data;
+using CaseStudy.Infrastructure.Repositories;
+using CaseStudy.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace CaseStudy.API
@@ -10,7 +14,7 @@ namespace CaseStudy.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Add _services to the container.
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -18,6 +22,10 @@ namespace CaseStudy.API
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<PrjContext>(opt => opt.UseSqlServer(
               builder.Configuration.GetConnectionString("dbcn")));
+            builder.Services.AddScoped<ILandingPageServices ,LandingPageServices>();
+            builder.Services.AddScoped<ILandingPageRepo ,LandingPageRepo>();
+            builder.Services.AddScoped<ICarRepo,CarRepo>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
