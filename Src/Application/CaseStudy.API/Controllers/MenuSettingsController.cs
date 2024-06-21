@@ -4,57 +4,49 @@ using CaseStudy.Core.Contracts.IUnitOfWork;
 using CaseStudy.Core.DTO;
 using CaseStudy.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace CaseStudy.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MenuSettingsController : ControllerBase
+    public class MenuSettingsController(IMenuSettingsServices _menuSettingsServices, IMapper _mapper) : ControllerBase
     {
-        private IMenuSettingsServices menuSettingsServices;
-        private IMapper mapper;
-        public MenuSettingsController(IMenuSettingsServices imenuSettingsServices,IMapper _mapper)
-        {
-
-            menuSettingsServices = imenuSettingsServices;
-            mapper = _mapper;
-        }
-
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MenuSettings>>> GetMenuSettings()
         {
             try
             {
-                var menuSettings =  await menuSettingsServices.GetMenuSettings();
+                var menuSettings =  await _menuSettingsServices.GetMenuSettings();
                 if (menuSettings == null)
                 {
-                    return BadRequest("No Records Found");
+                    return NoContent();
                 }
                 return Ok(menuSettings);
             }
-            catch (Exception ex)
+          catch (Exception ex)
             {
-                throw new Exception("Cannot Fetch MenuSettings", ex);
-
+                Log.Error(ex,"An error while retrieving the records");
+                return NoContent();
             }
         }
-        [HttpGet("/{DealerId}")]
-        public async Task<ActionResult<MenuSettings>> GetMenuSettingsById(int DealerId)
+        [HttpGet("/{dealerId}")]
+        public async Task<ActionResult<MenuSettings>> GetMenuSettingsById(int dealerId)
         {
             try
             {
 
-                var menuSettings = await menuSettingsServices.GetMenuSettingsById(DealerId);
+                var menuSettings = await _menuSettingsServices.GetMenuSettingsById(dealerId);
                 if (menuSettings == null)
                 {
-                    return BadRequest("Record Not Found");
+                    return NotFound("Dealer Not Found");
                 }
                 return Ok(menuSettings);
             }
             catch (Exception ex)
             {
-                throw new Exception($"Cannot Fetch MenuSettings of the Dealer:- {DealerId}", ex);
+                Log.Error(ex,"Cannot Fetch MenuSettings of the Dealer");
+                return NoContent();
 
             }
         }
@@ -63,26 +55,28 @@ namespace CaseStudy.API.Controllers
         {
             try
             {
-               var add =  await menuSettingsServices.AddMenuSettings(menuSettings);
+               var add =  await _menuSettingsServices.AddMenuSettings(menuSettings);
                 if (!add)
                 {
                     return NotFound("Dealer Not Found");
                 }
                 return Ok(menuSettings);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception();
+                Log.Error(ex, "Cannot Add MenuSettings of the Dealer");
+                return NoContent();
+
             }
         }
-        [HttpPut]
+        [HttpPut("/{dealerId}")]
 
-        public async Task<ActionResult<MenuSettings>> UpdateMenuSettings(MenuSettingsVM menuSetting)
+        public async Task<ActionResult<MenuSettings>> UpdateMenuSettings(int dealerId ,MenuSettingsVM menuSetting)
         {
             try
             {
-                var menuSettings = mapper.Map<MenuSettingsVM,MenuSettingsDTO>(menuSetting);
-                var updateRecord =  await menuSettingsServices.UpdateMenuSettings(menuSettings);
+                var menuSettings = _mapper.Map<MenuSettingsVM,MenuSettingsDTO>(menuSetting);
+                var updateRecord =  await _menuSettingsServices.UpdateMenuSettings(menuSettings);
                 if (!updateRecord)
                 {
                     return NotFound("Record Not Found");
@@ -91,25 +85,27 @@ namespace CaseStudy.API.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception("An error occurred while updating the menu settings.", ex);
+                Log.Error(ex, "Cannot Update MenuSettings of the Dealer");
+                return NoContent();
             }
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> DeleteMenuSettings(int DealerId)
+        [HttpDelete("/{dealerId}")]
+        public async Task<ActionResult> DeleteMenuSettings(int dealerId)
         {
             try
             {
-                var deleteRecord = await menuSettingsServices.DeleteMenuSettings(DealerId);
-                if (deleteRecord == false)
+                var deleteRecord = await _menuSettingsServices.DeleteMenuSettings(dealerId);
+                if (!deleteRecord)
                 {
                     return NotFound("Record Not Found");
                 }
-                return Ok($"Record with DealerId:- {DealerId} Successfully deleted");
+                return Ok($"Record with DealerId:- {dealerId} Successfully deleted");
             }
             catch (Exception ex)
             {
-                throw new Exception("An error occurred while deleting the menu settings.", ex);
+                Log.Error(ex, "Cannot Delete MenuSettings of the Dealer");
+                return NoContent();
             }
         }
 
