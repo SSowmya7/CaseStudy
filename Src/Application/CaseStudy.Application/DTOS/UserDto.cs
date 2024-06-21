@@ -1,4 +1,4 @@
-﻿using CaseStudy.Infrastructure;
+﻿using CaseStudy.Infrastructure.Constants;
 using System.ComponentModel.DataAnnotations;
 
 namespace CaseStudy.Application.DTOS
@@ -24,7 +24,7 @@ namespace CaseStudy.Application.DTOS
         [Required]
         [Phone]
         [StringLength(15)]
-        public string? PhoneNumber { get; set; } = Constants.Landing;
+        public string? PhoneNumber { get; set; } = StringConstants.Landing;
 
 
        

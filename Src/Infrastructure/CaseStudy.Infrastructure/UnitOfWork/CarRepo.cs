@@ -1,38 +1,33 @@
 ﻿using CaseStudy.Core.Contracts.IUnitOfWork;
 using CaseStudy.Core.Models;
+using CaseStudy.Infrastructure.Constants;
 using CaseStudy.Infrastructure.Data;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.Extensions.Configuration;
+using Serilog;
 using System.Data;
 
 namespace CaseStudy.Infrastructure.UnitOfWork
 {
-    public class CarServices : ICarServices
+    public class CarRepo(PrjContext Context, IConfiguration configuration) : ICarRepo
     {
-        private readonly PrjContext context;
-        private readonly string _connectionString;
-        public CarServices(PrjContext Context, IConfiguration configuration)
-        {
-            context = Context;
-            _connectionString = configuration.GetConnectionString("dbcn") ??"NoConnections";
-        }
+        private readonly string _connectionString = configuration.GetConnectionString("connectionString") ?? "NoConnections";
+
         public async Task<IEnumerable<Cars>> Get10RandomCars()
         {
             try
             {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    var sql = "SELECT TOP 10 * FROM Cars ";
-                    var cars = await connection.QueryAsync<Cars>(sql);
-                    return cars;
-                }
+                using var connection = new SqlConnection(_connectionString);
+                var sql = QueryConstants.randomCarsQuery; 
+                var cars = await connection.QueryAsync<Cars>(sql);
+                return cars;
             }
-            catch(Exception ex) { 
-            
-                throw new Exception(ex.ToString());
+            catch(Exception ex) {
+
+                Log.Error(ex, "An error occured while retrieving Cars");
+                return [];
             }
             
 
@@ -41,22 +36,32 @@ namespace CaseStudy.Infrastructure.UnitOfWork
         {
             try
             {
-                using (var connection = new SqlConnection(_connectionString))
-                {
+                using var connection = new SqlConnection(_connectionString);
 
-                    var cars = await connection.QueryAsync<Cars>("GetAllCars", commandType: System.Data.CommandType.StoredProcedure);
-                    return cars;
-                }
+                var cars = await connection.QueryAsync<Cars>("GetAllCars", commandType: System.Data.CommandType.StoredProcedure);
+                return cars;
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception();
+
+                Log.Error(ex, "An error occured while retrieving Cars");
+                return [];
             }
 
         }
-        public async Task<Cars> GetCarByVin(string vin)
+        public async Task<Cars?> GetCarByVin(string vin)
         {
-            return await context.Cars.FirstOrDefaultAsync(c => c.VIN == vin);
+            try
+            {
+                return await Context.Cars.FirstOrDefaultAsync(c => c.VIN == vin);
+            }
+            catch (Exception ex) {
+                Log.Error(ex, "An error occured while retrieving car");
+                return null ;
+            }
+
+
+
         }
 
         public async Task<IEnumerable<Cars>> GetSimilarCarsAsync(string vin)
@@ -67,11 +72,11 @@ namespace CaseStudy.Infrastructure.UnitOfWork
                 var car = await GetCarByVin(vin);
                 if (car == null)
                 {
-                    return Enumerable.Empty<Cars>();
+                    return [];
                 }
 
 
-                var cars = await context.Cars
+                var cars = await Context.Cars
                     .Where(c => c.Make == car.Make
                     //  && c.Model == car.Model 
                     && c.HomeNetVehicleId != car.HomeNetVehicleId)
@@ -79,9 +84,11 @@ namespace CaseStudy.Infrastructure.UnitOfWork
 
                 return cars;
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception();
+
+                Log.Error(ex, "An error occured while retrieving Cars");
+                return [];
             }
         }
 
@@ -90,23 +97,18 @@ namespace CaseStudy.Infrastructure.UnitOfWork
             try
             {
 
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    string sql = @$"
-                SELECT c.*
-                FROM UserFavourites uf
-                JOIN Cars c ON uf.VIN = c.VIN
-               
-                WHERE uf.UserId = {userId}";
+                using var connection = new SqlConnection(_connectionString);
+                string sql = QueryConstants.carByUserId;
 
 
 
-                    return await connection.QueryAsync<Cars>(sql);
-                }
+                return await connection.QueryAsync<Cars>(sql);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception();
+
+                Log.Error(ex, "An error occured while retrieving Cars");
+                return [];
             }
         }
         
@@ -114,9 +116,9 @@ namespace CaseStudy.Infrastructure.UnitOfWork
         {
             try
             {
-                IQueryable<Cars> query = context.Cars;
+                IQueryable<Cars> query = Context.Cars;
 
-                if (!string.IsNullOrEmpty(make))
+                if (!string.IsNullOrEmpty(make)) 
                 {
                     query = query.Where(c => c.Make == make);
                 }
@@ -138,9 +140,11 @@ namespace CaseStudy.Infrastructure.UnitOfWork
 
                 return await query.ToListAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception();
+
+                Log.Error(ex, "An error occured while retrieving Cars");
+                return [];
             }
         }
 

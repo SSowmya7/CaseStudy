@@ -24,7 +24,7 @@ namespace CaseStudy.API
               builder.Configuration.GetConnectionString("dbcn")));
             builder.Services.AddScoped<ILandingPageServices ,LandingPageServices>();
             builder.Services.AddScoped<ILandingPageRepo ,LandingPageRepo>();
-            builder.Services.AddScoped<ICarServices,CarServices>();
+            builder.Services.AddScoped<ICarRepo,CarRepo>();
 
             var app = builder.Build();
 

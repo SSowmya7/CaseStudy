@@ -1,6 +1,5 @@
 ﻿using CaseStudy.Core.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
 
 namespace CaseStudy.Infrastructure.Data;
 

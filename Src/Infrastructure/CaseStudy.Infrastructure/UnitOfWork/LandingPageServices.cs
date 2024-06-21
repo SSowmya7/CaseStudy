@@ -1,33 +1,26 @@
-﻿using CaseStudy.Core.Contracts.IReposritories;
-using CaseStudy.Core.Contracts.IUnitOfWork;
+﻿using CaseStudy.Core.Contracts.IUnitOfWork;
 using CaseStudy.Core.Models;
-using Microsoft.Data.SqlClient;
+using Serilog;
 
 namespace CaseStudy.Infrastructure.UnitOfWork
 {
-    public class LandingPageServices : ILandingPageServices
+    public class LandingPageServices(ICarRepo _carRepo) : ILandingPageServices
     {
-        ILandingPageRepo _landingPageRepo;
-        public LandingPageServices(ILandingPageRepo landingPageRepo) {
-
-            _landingPageRepo = landingPageRepo;        
-        }
-        //public IEnumerable<DealerPages> GetPageSettings(string landing)
-        //{
-        //    var PageSettings = _landingPageRepo.GetPageSettings(landing);
-        //    return PageSettings;
-        //}
+       
         public async Task<IEnumerable<Cars>> Get10RandomCars()
         {
             try
             {
-                var cars = await _landingPageRepo.Get10RandomCars();
+                var cars = await _carRepo.Get10RandomCars();
                 return cars;
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception();
+
+                Log.Error(ex, "An error occured while retrieving Cars");
+                return [];
             }
+
 
 
         }

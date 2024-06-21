@@ -1,6 +1,6 @@
-﻿namespace CaseStudy.Infrastructure
+﻿namespace CaseStudy.Infrastructure.Constants
 {
-    public static class Constants
+    public static class StringConstants
     {
         public const string Landing = "LandingPage";
         public const string Srp = "SrpPage";
