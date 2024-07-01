@@ -1,5 +1,9 @@
 
+using CaseStudy.Core.Contracts.IReposritories;
+using CaseStudy.Core.Contracts.IUnitOfWork;
 using CaseStudy.Infrastructure.Data;
+using CaseStudy.Infrastructure.UnitOfWork;
+using CaseStudy.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace CaseStudy.API
@@ -18,6 +22,8 @@ namespace CaseStudy.API
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<PrjContext>(opt => opt.UseSqlServer(
               builder.Configuration.GetConnectionString("dbcn")));
+            builder.Services.AddScoped<IUserFavRepo, UserFavRepo>();
+            builder.Services.AddScoped<IUserFavServices, UserFavServices>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
