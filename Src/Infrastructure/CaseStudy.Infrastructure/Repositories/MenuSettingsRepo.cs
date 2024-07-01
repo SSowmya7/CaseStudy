@@ -1,14 +1,8 @@
 ﻿using CaseStudy.Core.Contracts.IReposritories;
+using CaseStudy.Core.DTO;
 using CaseStudy.Core.Models;
 using CaseStudy.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using CaseStudy.Application.DTOS;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CaseStudy.Core.DTO;
 
 namespace CaseStudy.Infrastructure.Repositories
 {
