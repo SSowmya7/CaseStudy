@@ -4,18 +4,13 @@ using CaseStudy.Core.Models;
 
 namespace CaseStudy.Infrastructure.UnitOfWork
 {
-    public class HeaderFooterSettingsServices : IHeaderFooterSettingsServices
+    public class HeaderFooterSettingsServices(IHeaderFooterSettingsRepo headerFooterSettingsRepo) : IHeaderFooterSettingsServices
     {
-        private IHeaderFooterSettingsRepo repo;
-        public HeaderFooterSettingsServices(IHeaderFooterSettingsRepo headerFooterSettingsRepo)
-        {
-            repo = headerFooterSettingsRepo;
-        }
         public async Task<IEnumerable<HeaderAndFooterSettings>> GetHeaderFooterSettings()
         {
             try
             {
-                return await repo.GetHeaderFooterSettings();
+                return await headerFooterSettingsRepo.GetHeaderFooterSettings();
             }
             catch (Exception ex)
             {
@@ -23,18 +18,18 @@ namespace CaseStudy.Infrastructure.UnitOfWork
 
             }
         }
-        public async Task<HeaderAndFooterSettings> GetHeaderFooterSettingsById(int DealerId)
+        public async Task<HeaderAndFooterSettings> GetHeaderFooterSettingsById(int dealerId)
         {
             try
             {
 
-                var settings = await repo.GetHeaderFooterSettingsById(DealerId);
+                var settings = await headerFooterSettingsRepo.GetHeaderFooterSettingsById(dealerId);
 
                 return settings;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Cannot Fetch HeaderAndFooterSettings of the Dealer:- {DealerId}", ex);
+                throw new Exception($"Cannot Fetch HeaderAndFooterSettings of the Dealer:- {dealerId}", ex);
 
             }
         }
@@ -42,7 +37,7 @@ namespace CaseStudy.Infrastructure.UnitOfWork
         {
             try
             {
-                var addrecord = await repo.AddHeaderAndFooterSettings(headerAndFooterSettings);
+                var addrecord = await headerFooterSettingsRepo.AddHeaderAndFooterSettings(headerAndFooterSettings);
                 if (!addrecord)
                 {
                     return false;
@@ -60,7 +55,7 @@ namespace CaseStudy.Infrastructure.UnitOfWork
             try
             {
                
-                var updatedrecord = await repo.UpdateHeaderAndFooterSettings(headerAndFooterSettings);
+                var updatedrecord = await headerFooterSettingsRepo.UpdateHeaderAndFooterSettings(headerAndFooterSettings);
                 if (!updatedrecord)
                 {
                     return false;
@@ -73,11 +68,11 @@ namespace CaseStudy.Infrastructure.UnitOfWork
             }
         }
 
-        public async Task<bool> DeleteHeaderAndFooterSettings(int DealerId)
+        public async Task<bool> DeleteHeaderAndFooterSettings(int dealerId)
         {
             try
             {
-                var deletedRecord = await repo.DeleteHeaderAndFooterSettings(DealerId);
+                var deletedRecord = await headerFooterSettingsRepo.DeleteHeaderAndFooterSettings(dealerId);
                 if (!deletedRecord)
                 {
                     return false ;

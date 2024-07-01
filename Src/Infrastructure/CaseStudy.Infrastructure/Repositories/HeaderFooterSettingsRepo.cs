@@ -5,20 +5,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CaseStudy.Infrastructure.Repositories
 {
-    public class HeaderFooterSettingsRepo : IHeaderFooterSettingsRepo
+    public class HeaderFooterSettingsRepo(PrjContext _context) : IHeaderFooterSettingsRepo
     {
-        public PrjContext context { get; set; }
-        public HeaderFooterSettingsRepo(PrjContext prjContext)
-        {
-            context = prjContext;
-        }
-
        
+
         public async Task<IEnumerable<HeaderAndFooterSettings>> GetHeaderFooterSettings()
         {
             try
             {
-                var settings = await context.HeaderAndFooterSettings.ToListAsync();
+                var settings = await _context.HeaderAndFooterSettings.ToListAsync();
                 return settings;
             }
             catch (Exception ex)
@@ -27,18 +22,18 @@ namespace CaseStudy.Infrastructure.Repositories
 
             }
         }
-        public async Task<HeaderAndFooterSettings> GetHeaderFooterSettingsById(int DealerId)
+        public async Task<HeaderAndFooterSettings> GetHeaderFooterSettingsById(int dealerId)
         {
             try
             {
 
-                var settings = await context.HeaderAndFooterSettings.FirstOrDefaultAsync(ms => ms.DealerId == DealerId);
+                var settings = await _context.HeaderAndFooterSettings.FirstOrDefaultAsync(ms => ms.DealerId == dealerId);
 
                 return settings;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Cannot Fetch HeaderAndFooterSettings of the Dealer:- {DealerId}", ex);
+                throw new Exception($"Cannot Fetch HeaderAndFooterSettings of the Dealer:- {dealerId}", ex);
 
             }
         }
@@ -46,13 +41,13 @@ namespace CaseStudy.Infrastructure.Repositories
         {
             try
             {
-                var Dealer = await context.dealers.FindAsync(headerAndFooterSettings.DealerId);
+                var Dealer = await _context.dealers.FindAsync(headerAndFooterSettings.DealerId);
                 if (Dealer == null)
                 {
                     return false;
                 }
-                await context.HeaderAndFooterSettings.AddAsync(headerAndFooterSettings);
-                await context.SaveChangesAsync();
+                await _context.HeaderAndFooterSettings.AddAsync(headerAndFooterSettings);
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch
@@ -65,7 +60,7 @@ namespace CaseStudy.Infrastructure.Repositories
         {
             try
             {
-                var existingMenuSetting = await context.HeaderAndFooterSettings
+                var existingMenuSetting = await _context.HeaderAndFooterSettings
            .FirstOrDefaultAsync(ms => ms.DealerId == headerAndFooterSettings.DealerId);
                 if (existingMenuSetting == null)
                 {
@@ -83,7 +78,7 @@ namespace CaseStudy.Infrastructure.Repositories
                 {
                     existingMenuSetting.FooterStyle = headerAndFooterSettings.FooterStyle;
                 }
-                await context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
@@ -92,18 +87,18 @@ namespace CaseStudy.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> DeleteHeaderAndFooterSettings(int DealerId)
+        public async Task<bool> DeleteHeaderAndFooterSettings(int dealerId)
         {
             try
             {
-                var existingHeaderAndFooterSettings = await context.HeaderAndFooterSettings
-           .FirstOrDefaultAsync(ms => ms.DealerId == DealerId);
+                var existingHeaderAndFooterSettings = await _context.HeaderAndFooterSettings
+           .FirstOrDefaultAsync(ms => ms.DealerId == dealerId);
                 if (existingHeaderAndFooterSettings == null)
                 {
                     return false;
                 }
-                context.HeaderAndFooterSettings.Remove(existingHeaderAndFooterSettings);
-                await context.SaveChangesAsync();
+                _context.HeaderAndFooterSettings.Remove(existingHeaderAndFooterSettings);
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
