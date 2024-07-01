@@ -2,6 +2,7 @@
 using CaseStudy.Core.Models;
 using CaseStudy.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace CaseStudy.Infrastructure.Repositories
 {
@@ -18,7 +19,8 @@ namespace CaseStudy.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception("Cannot Fetch MenuSettings", ex);
+                Log.Error(ex, "Cannot Fetch MenuSettings");
+                return [];
 
             }
         }
@@ -33,7 +35,8 @@ namespace CaseStudy.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Cannot Fetch HeaderAndFooterSettings of the Dealer:- {dealerId}", ex);
+                Log.Error(ex, "Cannot Fetch MenuSettings");
+                return null;
 
             }
         }
@@ -50,9 +53,11 @@ namespace CaseStudy.Infrastructure.Repositories
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception();
+                Log.Error(ex, "An Error occured while Adding MenuSettings");
+                return false;
+
             }
         }
 
@@ -83,7 +88,9 @@ namespace CaseStudy.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception("An error occurred while updating the HeaderAndFooterSettings.", ex);
+                Log.Error(ex, "An Error occured while updating MenuSettings");
+                return false;
+
             }
         }
 
@@ -103,7 +110,9 @@ namespace CaseStudy.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception("An error occurred while deleting the HeaderAndFooterSettings.", ex);
+                Log.Error(ex, "An Error occured while deleting MenuSettings");
+                return false;
+
             }
         }
 

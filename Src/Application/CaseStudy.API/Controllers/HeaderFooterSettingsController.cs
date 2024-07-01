@@ -1,5 +1,6 @@
 ﻿using CaseStudy.Core.Contracts.IUnitOfWork;
 using CaseStudy.Core.Models;
+using CaseStudy.Infrastructure.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CaseStudy.API.Controllers
@@ -18,7 +19,7 @@ namespace CaseStudy.API.Controllers
             }
             return Ok(settings);
         }
-        [HttpGet("/{dealerId}")]
+        [HttpGet("{dealerId:int}")]
         public async Task<IActionResult> GetHeaderFoooterSettingsById( int dealerId)
         {
             var settings = await headerFooterSettingsServices.GetHeaderFooterSettingsById(dealerId);
@@ -31,31 +32,43 @@ namespace CaseStudy.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddHeaderFooterSettings(HeaderAndFooterSettings headerAndFooterSettings)
         {
-            var settings = await headerFooterSettingsServices.AddHeaderAndFooterSettings(headerAndFooterSettings);
-            if (!settings)
+            if (headerAndFooterSettings == null)
             {
-                return BadRequest("Dealer Not Found, Cannot add the record");
+                
+                return Content("Invalid data");
             }
-            return Ok(headerAndFooterSettings);
-        }
-        [HttpPut("/{dealerId}")]
-        public async Task<IActionResult> UpdateHeaderFooterSettings(int dealerId ,HeaderAndFooterSettings headerAndFooterSettings)
-        {
-            var settings = await headerFooterSettingsServices.UpdateHeaderAndFooterSettings(headerAndFooterSettings);
-            if (!settings)
+
+            var result = await headerFooterSettingsServices.AddHeaderAndFooterSettings(headerAndFooterSettings);
+            if (!result)
             {
-                return BadRequest("Dealer Not Found, Cannot update the record");
+                return Content("Dealer not found, cannot add the record");
             }
-            return Ok($"Record with Dealer Id :- {headerAndFooterSettings.DealerId} updated successfully ");
+            return CreatedAtAction(nameof(GetHeaderFoooterSettingsById), new { dealerId = headerAndFooterSettings.DealerId }, headerAndFooterSettings);
 
         }
-        [HttpDelete("/{dealerId}")]
+        [HttpPut("/{dealerId:int}")]
+        public async Task<IActionResult> UpdateHeaderFooterSettings(int dealerId ,HeaderAndFooterSettings headerAndFooterSettings)
+        {
+            if ( headerAndFooterSettings.DealerId != dealerId)
+            {
+                return Content("Invalid data");
+            }
+
+            var result = await headerFooterSettingsServices.UpdateHeaderAndFooterSettings(headerAndFooterSettings);
+            if (!result)
+            {
+                return Content("Dealer not found, cannot update the record");
+            }
+            return Ok($"Record with Dealer Id: {headerAndFooterSettings.DealerId} updated successfully");
+
+        }
+        [HttpDelete("/{dealerId:int}")]
         public async Task<IActionResult> DeleteHeaderFooterSettings(int dealerId)
         {
             var settings = await headerFooterSettingsServices.DeleteHeaderAndFooterSettings(dealerId);
             if (!settings)
             {
-                return BadRequest("Dealer Not Found, Cannot delete the record");
+                return Content("Dealer Not Found, Cannot delete the record");
             }
             return Ok($"Record with Dealer Id :- {dealerId} deleted successfully ");
         }
