@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CaseStudy.Application.DTOS
+namespace CaseStudy.Application.VM
 {
     public class UserDto
     {
