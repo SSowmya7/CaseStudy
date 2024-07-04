@@ -44,7 +44,7 @@ namespace CaseStudy.Infrastructure.Repositories
         {
             try
             {
-                var Dealer = await _context.dealers.FindAsync(headerAndFooterSettings.DealerId);
+                var Dealer = await _context.Dealers.FindAsync(headerAndFooterSettings.DealerId);
                 if (Dealer == null)
                 {
                     return false;
