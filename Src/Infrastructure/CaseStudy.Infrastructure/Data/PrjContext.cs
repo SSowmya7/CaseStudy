@@ -16,7 +16,7 @@ namespace CaseStudy.Infrastructure.Data
         public DbSet<Users> Users { get; set; }
 
 
-
     }
+
 
 }
