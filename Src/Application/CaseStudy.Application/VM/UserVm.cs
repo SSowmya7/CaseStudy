@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CaseStudy.Application.VM
 {
-    public class UserDto
+    public class UserVm
     {
         [Key]
         public int Id { get; set; }
