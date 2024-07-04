@@ -1,10 +1,6 @@
-
-using CaseStudy.Core.Contracts.IReposritories;
-using CaseStudy.Core.Contracts.IUnitOfWork;
 using CaseStudy.Infrastructure.Data;
-using CaseStudy.Infrastructure.Repositories;
-using CaseStudy.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace CaseStudy.API
 {
@@ -22,10 +18,6 @@ namespace CaseStudy.API
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<PrjContext>(opt => opt.UseSqlServer(
               builder.Configuration.GetConnectionString("dbcn")));
-            builder.Services.AddScoped<ILandingPageServices ,LandingPageServices>();
-            builder.Services.AddScoped<ILandingPageRepo ,LandingPageRepo>();
-            builder.Services.AddScoped<ICarRepo,CarRepo>();
-
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -34,7 +26,7 @@ namespace CaseStudy.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
