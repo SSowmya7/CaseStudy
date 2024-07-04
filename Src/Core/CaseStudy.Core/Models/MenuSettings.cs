@@ -9,6 +9,6 @@ namespace CaseStudy.Core.Models
         public string? MenuType {  get; set; }
         public string? SrpFilterPosition { get; set; }
         
-
+        
     }
 }

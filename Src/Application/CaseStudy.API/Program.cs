@@ -1,10 +1,13 @@
 
+using AutoMapper;
+using CaseStudy.API.Config;
 using CaseStudy.Core.Contracts.IReposritories;
 using CaseStudy.Core.Contracts.IUnitOfWork;
 using CaseStudy.Infrastructure.Data;
-using CaseStudy.Infrastructure.UnitOfWork;
 using CaseStudy.Infrastructure.Repositories;
+using CaseStudy.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace CaseStudy.API
 {
@@ -14,7 +17,7 @@ namespace CaseStudy.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Add _services to the container.
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -22,6 +25,10 @@ namespace CaseStudy.API
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<PrjContext>(opt => opt.UseSqlServer(
               builder.Configuration.GetConnectionString("dbcn")));
+            builder.Services.AddScoped<IMenuSettingsRepo, MenuSettingsRepo>();
+            builder.Services.AddScoped<IMenuSettingsServices,MenuSettingsServices>();
+            var mapper = AutoMapperConfiguration.IntializeMapper();
+            builder.Services.AddSingleton(mapper);
             builder.Services.AddScoped<IUserFavRepo, UserFavRepo>();
             builder.Services.AddScoped<IUserFavServices, UserFavServices>();
             var app = builder.Build();
@@ -32,7 +39,7 @@ namespace CaseStudy.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
