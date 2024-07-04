@@ -21,7 +21,7 @@ public class PrjContext : DbContext
     public DbSet<Users> Users { get; set; }
 
 
+    }
 
 
 
-}
