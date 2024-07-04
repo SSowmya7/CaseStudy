@@ -1,4 +1,11 @@
+
+using AutoMapper;
+using CaseStudy.API.Config;
+using CaseStudy.Core.Contracts.IReposritories;
+using CaseStudy.Core.Contracts.IUnitOfWork;
 using CaseStudy.Infrastructure.Data;
+using CaseStudy.Infrastructure.Repositories;
+using CaseStudy.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -18,6 +25,10 @@ namespace CaseStudy.API
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<PrjContext>(opt => opt.UseSqlServer(
               builder.Configuration.GetConnectionString("dbcn")));
+            builder.Services.AddScoped<IMenuSettingsRepo, MenuSettingsRepo>();
+            builder.Services.AddScoped<IMenuSettingsServices,MenuSettingsServices>();
+            var mapper = AutoMapperConfiguration.IntializeMapper();
+            builder.Services.AddSingleton(mapper);
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
