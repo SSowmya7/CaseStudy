@@ -29,6 +29,8 @@ namespace CaseStudy.API
             builder.Services.AddScoped<IMenuSettingsServices,MenuSettingsServices>();
             var mapper = AutoMapperConfiguration.IntializeMapper();
             builder.Services.AddSingleton(mapper);
+            builder.Services.AddScoped<IUserFavRepo, UserFavRepo>();
+            builder.Services.AddScoped<IUserFavServices, UserFavServices>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
