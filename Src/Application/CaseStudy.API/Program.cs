@@ -31,6 +31,8 @@ namespace CaseStudy.API
             builder.Services.AddSingleton(mapper);
             builder.Services.AddScoped<IUserFavRepo, UserFavRepo>();
             builder.Services.AddScoped<IUserFavServices, UserFavServices>();
+            builder.Services.AddScoped<IHeaderFooterSettingsRepo, HeaderFooterSettingsRepo>();
+            builder.Services.AddScoped<IHeaderFooterSettingsServices , HeaderFooterSettingsServices>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
