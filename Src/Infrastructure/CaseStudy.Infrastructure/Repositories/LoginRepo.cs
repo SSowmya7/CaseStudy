@@ -21,7 +21,7 @@ namespace CaseStudy.Infrastructure.Repositories
 
         public bool  ValidateUser(Users LoginUser)
         {
-            var user = context.users.SingleOrDefault(u => u.FirstName == LoginUser.FirstName);
+            var user = context.Users.SingleOrDefault(u => u.FirstName == LoginUser.FirstName);
             if (user != null && user.FirstName == LoginUser.FirstName && user.Password == LoginUser.Password)
             {
                 return true;
