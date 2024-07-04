@@ -19,7 +19,7 @@ namespace CaseStudy.Infrastructure.Repositories
         {
             try
             {
-                return await context.menuSettings.ToListAsync();
+                return await context.MenuSettings.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -32,7 +32,7 @@ namespace CaseStudy.Infrastructure.Repositories
             try
             {
 
-                var settings= await context.menuSettings.FirstOrDefaultAsync(ms => ms.DealerId == DealerId);
+                var settings= await context.MenuSettings.FirstOrDefaultAsync(ms => ms.DealerId == DealerId);
                 
                 return settings;
             }
@@ -46,7 +46,7 @@ namespace CaseStudy.Infrastructure.Repositories
         {
             try
             {
-                var Dealer = await context.dealers.FindAsync(menuSettings.DealerId);
+                var Dealer = await context.Dealers.FindAsync(menuSettings.DealerId);
                 if(Dealer == null) {
                  return false;
                 }
@@ -64,7 +64,7 @@ namespace CaseStudy.Infrastructure.Repositories
         {
             try
             {
-                var existingMenuSetting = await context.menuSettings
+                var existingMenuSetting = await context.MenuSettings
            .FirstOrDefaultAsync(ms => ms.DealerId == menuSetting.DealerId);
                 if (existingMenuSetting == null)
                 {
@@ -91,13 +91,13 @@ namespace CaseStudy.Infrastructure.Repositories
         {
             try
             {
-                var existingMenuSetting = await context.menuSettings
+                var existingMenuSetting = await context.MenuSettings
            .FirstOrDefaultAsync(ms => ms.DealerId == DealerId);
                 if (existingMenuSetting == null)
                 {
                     return false;
                 }
-                context.menuSettings.Remove(existingMenuSetting);
+                context.MenuSettings.Remove(existingMenuSetting);
                 await context.SaveChangesAsync();
                 return true;
             }
