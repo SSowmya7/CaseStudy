@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CaseStudy.Infrastructure.Constants;
+using System.ComponentModel.DataAnnotations;
 
-namespace CaseStudy.Application.DTOS
+namespace CaseStudy.Application.VM
 {
     public class UserDto
     {
@@ -23,7 +24,8 @@ namespace CaseStudy.Application.DTOS
         [Required]
         [Phone]
         [StringLength(15)]
-        public string? PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; } = StringConstants.Landing;
+
 
        
     }

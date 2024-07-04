@@ -16,9 +16,4 @@
     <PackageReference Include="Serilog" Version="4.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Contracts\IReposritories\" />
-    <Folder Include="Contracts\IUnitOfWork\" />
-  </ItemGroup>
-
 </Project>
