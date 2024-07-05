@@ -6,20 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CaseStudy.Infrastructure.Repositories
 {
-    public class MenuSettingsRepo : IMenuSettingsRepo
+    public class MenuSettingsRepo(PrjContext prjContext) : IMenuSettingsRepo
     {
-        private PrjContext context;
-        public MenuSettingsRepo(PrjContext prjContext)
-        {
-            context = prjContext;
-        }
-
-
         public async Task<IEnumerable<MenuSettings>> GetMenuSettings()
         {
             try
             {
-                return await context.MenuSettings.ToListAsync();
+                return await prjContext.MenuSettings.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -32,7 +25,7 @@ namespace CaseStudy.Infrastructure.Repositories
             try
             {
 
-                var settings= await context.MenuSettings.FirstOrDefaultAsync(ms => ms.DealerId == DealerId);
+                var settings= await prjContext.MenuSettings.FirstOrDefaultAsync(ms => ms.DealerId == DealerId);
                 
                 return settings;
             }
@@ -46,12 +39,12 @@ namespace CaseStudy.Infrastructure.Repositories
         {
             try
             {
-                var Dealer = await context.Dealers.FindAsync(menuSettings.DealerId);
+                var Dealer = await prjContext.Dealers.FindAsync(menuSettings.DealerId);
                 if(Dealer == null) {
                  return false;
                 }
-                await context.AddAsync(menuSettings);
-                await context.SaveChangesAsync();
+                await prjContext.AddAsync(menuSettings);
+                await prjContext.SaveChangesAsync();
                 return true;
             }
             catch
@@ -64,7 +57,7 @@ namespace CaseStudy.Infrastructure.Repositories
         {
             try
             {
-                var existingMenuSetting = await context.MenuSettings
+                var existingMenuSetting = await prjContext.MenuSettings
            .FirstOrDefaultAsync(ms => ms.DealerId == menuSetting.DealerId);
                 if (existingMenuSetting == null)
                 {
@@ -78,7 +71,7 @@ namespace CaseStudy.Infrastructure.Repositories
                 {
                     existingMenuSetting.SrpFilterPosition = menuSetting.SrpFilterPosition;
                 }
-                await context.SaveChangesAsync();
+                await prjContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
@@ -91,14 +84,14 @@ namespace CaseStudy.Infrastructure.Repositories
         {
             try
             {
-                var existingMenuSetting = await context.MenuSettings
+                var existingMenuSetting = await prjContext.MenuSettings
            .FirstOrDefaultAsync(ms => ms.DealerId == DealerId);
                 if (existingMenuSetting == null)
                 {
                     return false;
                 }
-                context.MenuSettings.Remove(existingMenuSetting);
-                await context.SaveChangesAsync();
+                prjContext.MenuSettings.Remove(existingMenuSetting);
+                await prjContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)

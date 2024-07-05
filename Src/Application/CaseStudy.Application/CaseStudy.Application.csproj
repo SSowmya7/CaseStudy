@@ -14,9 +14,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Serilog" Version="4.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
+  
     <ProjectReference Include="..\..\Core\CaseStudy.Core\CaseStudy.Core.csproj" />
     <ProjectReference Include="..\..\Infrastructure\CaseStudy.Infrastructure\CaseStudy.Infrastructure.csproj" />
   </ItemGroup>
