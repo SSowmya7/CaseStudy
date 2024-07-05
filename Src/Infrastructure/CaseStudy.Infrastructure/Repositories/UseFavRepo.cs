@@ -14,7 +14,8 @@ namespace CaseStudy.Infrastructure.Repositories
             {
                 // IEnumerable<Cars> cars = await userFavServices.GetFavCars(userId);
                 //return cars;
-                throw new NotImplementedException();//this method already exists in carservices
+                //throw new NotImplementedException();//this method already exists in carservices
+                return [];
             }
             catch (Exception ex)
             {
