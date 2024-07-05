@@ -12,7 +12,7 @@ namespace CaseStudy.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetHeaderFoooterSettings()
         {
-            var settings =  await headerFooterSettingsServices.GetHeaderFooterSettings();
+            var settings = await headerFooterSettingsServices.GetHeaderFooterSettings();
             if (settings == null)
             {
                 return NotFound("No records Found");
@@ -20,7 +20,7 @@ namespace CaseStudy.API.Controllers
             return Ok(settings);
         }
         [HttpGet("{dealerId:int}")]
-        public async Task<IActionResult> GetHeaderFoooterSettingsById( int dealerId)
+        public async Task<IActionResult> GetHeaderFoooterSettingsById(int dealerId)
         {
             var settings = await headerFooterSettingsServices.GetHeaderFooterSettingsById(dealerId);
             if (settings == null)
@@ -34,7 +34,7 @@ namespace CaseStudy.API.Controllers
         {
             if (headerAndFooterSettings == null)
             {
-                
+
                 return Content("Invalid data");
             }
 
@@ -46,10 +46,10 @@ namespace CaseStudy.API.Controllers
             return CreatedAtAction(nameof(GetHeaderFoooterSettingsById), new { dealerId = headerAndFooterSettings.DealerId }, headerAndFooterSettings);
 
         }
-        [HttpPut("/{dealerId:int}")]
-        public async Task<IActionResult> UpdateHeaderFooterSettings(int dealerId ,HeaderAndFooterSettings headerAndFooterSettings)
+        [HttpPut("{dealerId:int}")]
+        public async Task<IActionResult> UpdateHeaderFooterSettings(int dealerId, HeaderAndFooterSettings headerAndFooterSettings)
         {
-            if ( headerAndFooterSettings.DealerId != dealerId)
+            if (headerAndFooterSettings.DealerId != dealerId)
             {
                 return Content("Invalid data");
             }
@@ -62,7 +62,7 @@ namespace CaseStudy.API.Controllers
             return Ok($"Record with Dealer Id: {headerAndFooterSettings.DealerId} updated successfully");
 
         }
-        [HttpDelete("/{dealerId:int}")]
+        [HttpDelete("{dealerId:int}")]
         public async Task<IActionResult> DeleteHeaderFooterSettings(int dealerId)
         {
             var settings = await headerFooterSettingsServices.DeleteHeaderAndFooterSettings(dealerId);
@@ -72,8 +72,8 @@ namespace CaseStudy.API.Controllers
             }
             return Ok($"Record with Dealer Id :- {dealerId} deleted successfully ");
         }
-        
-       
 
-}
+
+
+    }
 }

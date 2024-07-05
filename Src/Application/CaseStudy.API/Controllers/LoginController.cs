@@ -19,7 +19,7 @@ namespace CaseStudy.API.Controllers
         }
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Post(Users user)
+        public  IActionResult Post(Users user)
         {
                 var Token =  loginService.Login(user);
                 return Ok(Token);
