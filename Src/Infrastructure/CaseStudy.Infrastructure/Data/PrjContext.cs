@@ -15,8 +15,9 @@ namespace CaseStudy.Infrastructure.Data
         public DbSet<UserFavourites> UserFavourites { get; set; }
         public DbSet<Users> Users { get; set; }
 
-    }
 
     }
+
+}
 
 
