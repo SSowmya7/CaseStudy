@@ -8,21 +8,7 @@ namespace CaseStudy.Infrastructure.Repositories
 {
     public class UserFavRepo(PrjContext prjContext) : IUserFavRepo
     {
-        public async Task<IEnumerable<Cars>> GetFavCars(int userId)
-        {
-            try
-            {
-                // IEnumerable<Cars> cars = await userFavServices.GetFavCars(userId);
-                //return cars;
-                //throw new NotImplementedException();//this method already exists in carservices
-                return [];
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "An error while retriveing cars at repo level");
-                return [];
-            }
-        }
+        
         public async Task<bool> AddFavCar(UserFavourites favourite)
         {
             try

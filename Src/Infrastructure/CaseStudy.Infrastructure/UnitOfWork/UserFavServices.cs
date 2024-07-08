@@ -5,13 +5,13 @@ using Serilog;
 
 namespace CaseStudy.Infrastructure.UnitOfWork
 {
-    public class UserFavServices(IUserFavRepo _userFavRepo) : IUserFavServices
+    public class UserFavServices(IUserFavRepo _userFavRepo,ICarRepo carRepo) : IUserFavServices
     {
         public async Task<IEnumerable<Cars>> GetFavCars(int userId)
         {
             try
             {
-                IEnumerable<Cars> cars = await _userFavRepo.GetFavCars(userId);
+                IEnumerable<Cars> cars = await carRepo.GetFavouriteCarsByUserIdAsync(userId);
                 return cars;
             }
             catch (Exception ex)
