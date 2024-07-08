@@ -101,8 +101,9 @@ namespace CaseStudy.Infrastructure.UnitOfWork
                 string sql = QueryConstants.carByUserId;
 
 
+                var parameters = new { UserId = userId };
 
-                return await connection.QueryAsync<Cars>(sql);
+                return await connection.QueryAsync<Cars>(sql, parameters);
             }
             catch (Exception ex)
             {
