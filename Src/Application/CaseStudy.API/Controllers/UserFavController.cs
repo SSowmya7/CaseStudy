@@ -42,13 +42,13 @@ namespace CaseStudy.API.Controllers
             }
         }
 
-        [HttpDelete("/{userId}/{vin}")]
+        [HttpDelete("{userId}/{vin}")]
         public async Task<IActionResult> DeleteFavCar(int userId, string vin)
         {
             try
             {
                 await _favServices.DeleteFavCar(userId, vin);
-                return Content("Deleted Successfully");
+                return Ok("Deleted Successfully");
             }
             catch (Exception ex)
             {

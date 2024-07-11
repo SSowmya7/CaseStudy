@@ -29,6 +29,7 @@ namespace CaseStudy.API
             builder.Services.AddScoped<IMenuSettingsServices,MenuSettingsServices>();
             var mapper = AutoMapperConfiguration.IntializeMapper();
             builder.Services.AddSingleton(mapper);
+            builder.Services.AddScoped<ICarRepo,CarRepo>();
             builder.Services.AddScoped<IUserFavRepo, UserFavRepo>();
             builder.Services.AddScoped<IUserFavServices, UserFavServices>();
             builder.Services.AddScoped<IHeaderFooterSettingsRepo, HeaderFooterSettingsRepo>();

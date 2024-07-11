@@ -9,19 +9,13 @@ namespace CaseStudy.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LoginController : ControllerBase
+    public class LoginController(ILoginService _loginService) : ControllerBase
     {
-        private readonly ILoginService loginService;
-        public LoginController(ILoginService _loginService)
-        {
-            loginService = _loginService;
-
-        }
         [AllowAnonymous]
         [HttpPost]
         public  IActionResult Post(Users user)
         {
-                var Token =  loginService.Login(user);
+                var Token =  _loginService.Login(user);
                 return Ok(Token);
            
         }
