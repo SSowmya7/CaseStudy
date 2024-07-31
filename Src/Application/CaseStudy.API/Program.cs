@@ -4,6 +4,7 @@ using CaseStudy.API.Config;
 using CaseStudy.Core.Contracts.IReposritories;
 using CaseStudy.Core.Contracts.IUnitOfWork;
 using CaseStudy.Infrastructure.Data;
+using CaseStudy.Infrastructure.rep;
 using CaseStudy.Infrastructure.Repositories;
 using CaseStudy.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,8 @@ namespace CaseStudy.API
             builder.Services.AddScoped<IUserFavServices, UserFavServices>();
             builder.Services.AddScoped<IHeaderFooterSettingsRepo, HeaderFooterSettingsRepo>();
             builder.Services.AddScoped<IHeaderFooterSettingsServices , HeaderFooterSettingsServices>();
+            builder.Services.AddScoped<IPageSettingsRepo,PageSettingsRepo>();
+            builder.Services.AddScoped<IPageSettingsServices , PageSettingsServices>();
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
