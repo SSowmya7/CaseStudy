@@ -6,8 +6,8 @@ namespace CaseStudy.Core.Contracts.IReposritories
     {
         Task<IEnumerable<DealerPages>> GetAllPageSettings();
 
-        Task<DealerPages> GetPageSettingsById(int dealerId);
-
+        Task<IEnumerable<DealerPages>> GetPageSettingsById(int dealerId);
+        Task<IEnumerable<DealerPages>> GetPageSettingsByPageIdDealerId(int dealerId, int pageId);
         Task<bool> AddPageSettings(DealerPages PageSettings);
 
 

@@ -21,12 +21,27 @@ namespace CaseStudy.Infrastructure.UnitOfWork
 
             }
         }
-        public async Task<DealerPages> GetPageSettingsById(int dealerId)
+        public async Task<IEnumerable<DealerPages>> GetPageSettingsById(int dealerId)
         {
             try
             {
 
                 return await repo.GetPageSettingsById(dealerId);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Cannot Fetch PageSettings of the Dealer:- {dealerId}");
+
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<DealerPages>> GetPageSettingsByPageIdDealerId(int dealerId,int pageId)
+        {
+            try
+            {
+
+                return await repo.GetPageSettingsByPageIdDealerId(dealerId,pageId);
             }
             catch (Exception ex)
             {

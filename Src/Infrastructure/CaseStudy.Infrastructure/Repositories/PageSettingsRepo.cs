@@ -25,20 +25,34 @@ namespace CaseStudy.Infrastructure.rep
 
         }
 
-        public async Task<DealerPages> GetPageSettingsById(int dealerId)
+        public async Task<IEnumerable<DealerPages>> GetPageSettingsById(int dealerId)
         {
             try
             {
 
-                var settings = await prjContext.DealerPages.FirstOrDefaultAsync(ms => ms.DealerId == dealerId);
+                var settings = await prjContext.DealerPages.Where(ms => ms.DealerId == dealerId).ToListAsync();
 
                 return settings;
             }
             catch (Exception ex)
             {
                 Log.Error($"{ex.Message}", ex);
-                throw new Exception($"Cannot Fetch MenuSettings of the Dealer:- {dealerId}", ex);
+                return [];
+            }
+        }
+        public async Task<IEnumerable<DealerPages>> GetPageSettingsByPageIdDealerId(int dealerId,int pageId)
+        {
+            try
+            {
 
+                var settings = await prjContext.DealerPages.Where(ms => ms.DealerId == dealerId && ms.ComponentId == pageId).ToListAsync();
+
+                return settings;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{ex.Message}", ex);
+                return [];
             }
         }
 

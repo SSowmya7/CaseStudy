@@ -32,7 +32,7 @@ namespace CaseStudy.API.Controllers
             }
         }
         [HttpGet("{dealerId}")]
-        public async Task<ActionResult<DealerPages>> GetPageSettingsById(int dealerId)
+        public async Task<ActionResult<IEnumerable<DealerPages>>> GetPageSettingsById(int dealerId)
         {
             try
             {
@@ -51,6 +51,28 @@ namespace CaseStudy.API.Controllers
 
             }
         }
+
+        [HttpGet("{dealerId}/{pageId}")]
+        public async Task<ActionResult<IEnumerable<DealerPages>>> GetPageSettingsByPageIdDealerId(int dealerId,int pageId)
+        {
+            try
+            {
+
+                var menuSettings = await services.GetPageSettingsByPageIdDealerId(dealerId,pageId);
+                if (menuSettings == null)
+                {
+                    return NotFound("Dealer Not Found");
+                }
+                return Ok(menuSettings);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Cannot Fetch pageSettings of the Dealer");
+                return NoContent();
+
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<DealerPages>> AddPageSettings(DealerPages pageSettings)
         {
