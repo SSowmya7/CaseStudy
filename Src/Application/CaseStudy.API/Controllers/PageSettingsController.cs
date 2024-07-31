@@ -1,4 +1,5 @@
 ﻿using CaseStudy.Application.VM;
+using CaseStudy.Core.Contracts.IUnitOfWork;
 using CaseStudy.Core.DTO;
 using CaseStudy.Core.Models;
 using CaseStudy.Infrastructure.UnitOfWork;
@@ -10,14 +11,14 @@ namespace CaseStudy.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PageSettingsController(PageSettingsServices services) : ControllerBase
+    public class PageSettingsController(IPageSettingsServices services) : ControllerBase
     {
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DealerPages>>> GetPageSettings()
         {
             try
             {
-                var pageSettings = await services.GetPageSettings();
+                var pageSettings = await services.GetAllPageSettings();
                 if (pageSettings == null)
                 {
                     return NoContent();
@@ -30,7 +31,7 @@ namespace CaseStudy.API.Controllers
                 return NoContent();
             }
         }
-        [HttpGet("/{dealerId}")]
+        [HttpGet("{dealerId}")]
         public async Task<ActionResult<DealerPages>> GetPageSettingsById(int dealerId)
         {
             try
@@ -69,7 +70,7 @@ namespace CaseStudy.API.Controllers
 
             }
         }
-        [HttpPut("/{dealerId}")]
+        [HttpPut("{dealerId}")]
 
         public async Task<ActionResult<MenuSettings>> UpdatePageSettings(int dealerId, DealerPages pageSetting)
         {
@@ -80,7 +81,7 @@ namespace CaseStudy.API.Controllers
                 if (updateRecord)
                 {
                     return Ok(pageSetting);
-                 
+
                 }
                 return NotFound("Record Not Found");
 
@@ -92,12 +93,12 @@ namespace CaseStudy.API.Controllers
             }
         }
 
-        [HttpDelete("/{dealerId}")]
-        public async Task<ActionResult> DeletePageSettings(int dealerId,int pageId)
+        [HttpDelete("{dealerId}")]
+        public async Task<ActionResult> DeletePageSettings(int dealerId, int pageId)
         {
             try
             {
-                var deleteRecord = await services.DeletePageSettings(dealerId,pageId);
+                var deleteRecord = await services.DeletePageSettings(dealerId, pageId);
                 if (!deleteRecord)
                 {
                     return NotFound("Record Not Found");

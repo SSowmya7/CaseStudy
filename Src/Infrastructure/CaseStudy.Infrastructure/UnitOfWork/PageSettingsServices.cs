@@ -7,7 +7,7 @@ namespace CaseStudy.Infrastructure.UnitOfWork
 {
     public class PageSettingsServices(IPageSettingsRepo repo):IPageSettingsServices
     {
-        public async Task<IEnumerable<DealerPages>> GetPageSettings()
+        public async Task<IEnumerable<DealerPages>> GetAllPageSettings()
         {
 
             try
