@@ -45,13 +45,13 @@ namespace CaseStudy.API.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Cannot Fetch MenuSettings of the Dealer");
+                Log.Error(ex, "Cannot Fetch pageSettings of the Dealer");
                 return NoContent();
 
             }
         }
         [HttpPost]
-        public async Task<ActionResult<DealerPages>> AddMenuSettings(DealerPages pageSettings)
+        public async Task<ActionResult<DealerPages>> AddPageSettings(DealerPages pageSettings)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace CaseStudy.API.Controllers
         }
         [HttpPut("/{dealerId}")]
 
-        public async Task<ActionResult<MenuSettings>> UpdateMenuSettings(DealerPages pageSetting)
+        public async Task<ActionResult<MenuSettings>> UpdatePageSettings(int dealerId, DealerPages pageSetting)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace CaseStudy.API.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Cannot Update MenuSettings of the Dealer");
+                Log.Error(ex, "Cannot Update PageSettings of the Dealer");
                 return NoContent();
             }
         }
