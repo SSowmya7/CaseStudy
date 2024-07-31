@@ -24,9 +24,10 @@ namespace CaseStudy.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<PrjContext>(opt => opt.UseSqlServer(
-              builder.Configuration.GetConnectionString("dbcn")));
+              builder.Configuration.GetConnectionString("connectionString")));
             builder.Services.AddScoped<IMenuSettingsRepo, MenuSettingsRepo>();
             builder.Services.AddScoped<IMenuSettingsServices,MenuSettingsServices>();
+            builder.Services.AddScoped<ILandingPageServices,LandingPageServices>();
             var mapper = AutoMapperConfiguration.IntializeMapper();
             builder.Services.AddSingleton(mapper);
             builder.Services.AddScoped<ICarRepo,CarRepo>();
@@ -34,6 +35,16 @@ namespace CaseStudy.API
             builder.Services.AddScoped<IUserFavServices, UserFavServices>();
             builder.Services.AddScoped<IHeaderFooterSettingsRepo, HeaderFooterSettingsRepo>();
             builder.Services.AddScoped<IHeaderFooterSettingsServices , HeaderFooterSettingsServices>();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:5173")
+                               .AllowAnyHeader()
+                               .AllowAnyMethod();
+                    });
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -44,6 +55,7 @@ namespace CaseStudy.API
             }
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseCors("AllowSpecificOrigin");
 
 
             app.MapControllers();
