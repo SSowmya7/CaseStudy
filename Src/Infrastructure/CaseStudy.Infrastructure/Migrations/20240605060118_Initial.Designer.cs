@@ -130,7 +130,7 @@ namespace CaseStudy.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DealerId"));
 
-                    b.Property<string>("Domain")
+                    b.Property<string>("DealerName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("DealerId");
